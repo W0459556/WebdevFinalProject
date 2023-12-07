@@ -21,6 +21,173 @@
         <div style="background-color: grey;"></div>
         <div style="background-color: grey;"><h1>C++</h1></div>
         <div style="background-color: grey;"></div>
+
+        <div></div>
+        <div>
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////HIPSTER'S VINYL RECORDS/////
+#include <iostream>
+#include <string>
+#include <iomanip>
+#define fixedFloat(x) fixed << setprecision(2) << (x) // float of 2 decimal places
+using namespace std;
+
+
+struct{
+    string custName;
+    float distKilometers;
+    float totCost;
+} receipt;
+
+
+int main() {
+
+    cout << "Hipster's Local Vinyl Records - Customer Order Details\n\n";
+
+    cout << "Enter the customer's name: ";
+    getline (cin, receipt.custName);
+    // test: cout << "\n" << receipt.custName << "\n";
+
+    cout << "Enter the distance in kilometers for delivery: ";
+    cin >> receipt.distKilometers;
+
+    cout << "Enter the cost of records purcased: ";
+    cin >> receipt.totCost;
+
+    struct{
+        float delivCost = receipt.distKilometers*15;
+        float purcaseCost = receipt.totCost*1.14;
+    } endCosts;
+
+    cout << "\nPurchase summary for " << receipt.custName << "\n";
+    cout << "Delivery Cost: $" << fixedFloat(endCosts.delivCost) << "\n";
+    cout << "Purchase Cost: $" << fixedFloat(endCosts.purcaseCost) << "\n";
+    cout << "Total Cost:    $" << fixedFloat(endCosts.delivCost+endCosts.purcaseCost) << "\n";
+
+    return 0;
+}
+                    </code>
+                </pre>
+            </div>
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////WEEKLY LOAN CALCULATOR/////
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cmath> 
+#define fixedFloat(x) fixed << setprecision(2) << (x) // float of 2 decimal places
+using namespace std;
+
+
+struct{
+    int loanAmount;
+    float interestRate;
+    int yearsAmount;
+} loanInputs;
+
+
+int main() {
+    cout << "Weekly Loan Calculator\n\n";
+
+    cout << "Enter the amount of loan: $";
+    cin >> loanInputs.loanAmount;
+
+    cout <<"Enter the interest rate (%): ";
+    cin >> loanInputs.interestRate;
+
+    cout << "Enter the number of years: ";
+    cin >> loanInputs.yearsAmount;
+
+    double topOfFraction = loanInputs.interestRate/5200;
+    // cout << topOfFraction << "\n";
+
+    double bottomOfFractionLeft = (1 + topOfFraction);
+    // cout << bottomOfFractionLeft << "\n";
+
+    double bottomOfFractionRight = -52*loanInputs.yearsAmount;
+    // cout << bottomOfFractionRight << "\n";
+
+    double bottomOfFraction = 1 - pow(bottomOfFractionLeft, bottomOfFractionRight);
+    // cout << bottomOfFraction << "\n";
+
+    float weeklyLoanPayment = (topOfFraction/bottomOfFraction) * loanInputs.loanAmount;
+    // cout << weeklyLoanPayment << "\n";
+
+
+    cout << "\nYour weekly payment will be: $" << fixedFloat(weeklyLoanPayment) << "\n";
+
+    return 0;
+}
+                    </code>
+                </pre>
+            </div>
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////IMPERIAL METRIC CONVERTER/////
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cmath> 
+#define fixedFloat(x) fixed << setprecision(1) << (x) // float of 1 decimal place
+using namespace std;
+
+struct{
+    int tonsAmount;
+    int stoneAmount;
+    int poundsAmount;
+    int ouncesAmount;
+} imperial;
+
+
+int main() {
+    cout << "Imperial To Metric Conversion!\n\n";
+    // input
+    cout << "Enter the number of tons: ";   // tons
+    cin >> imperial.tonsAmount;
+    cout << "Enter the number of stone: ";  // stone
+    cin >> imperial.stoneAmount;
+    cout << "Enter the number of pound: ";  // pounds
+    cin >> imperial.poundsAmount;
+    cout << "Enter the number of ounces: "; // ounces
+    cin >> imperial.ouncesAmount;
+
+    //process
+
+    // calculate total ounces
+    int totalOunce = (imperial.poundsAmount * 16) + (imperial.stoneAmount * 224) + (imperial.tonsAmount * 35840) + imperial.ouncesAmount;
+    // calculate total grams
+    double totalGrams = (totalOunce / 35.274)*1000;
+
+    struct{
+        int tons;
+        int kilos;
+        float grams;
+    } final;
+
+    // calculate final tons
+    final.tons = totalGrams/1000000;
+    totalGrams = totalGrams-(final.tons*1000000); // how many grams are left after that
+
+    // calculate total kilograms
+    final.kilos = totalGrams/1000;
+    final.grams = totalGrams-(final.kilos*1000); // and the remaining amount of tons is how many are left after
+
+    cout << "\nYour metric weight is " << final.tons << " metric tons, " << fixedFloat(final.kilos) << " kilos, and " << final.grams << " grams.\n";
+    return 0;
+}
+                    </code>
+                </pre>
+            </div>
+            <br /><br /><br /><br /><br />
+        </div>
+        <div></div>
     </div>
 
     

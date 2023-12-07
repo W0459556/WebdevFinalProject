@@ -18,11 +18,147 @@
             <a href="portfolioPython.html"><button class="headerButtonSelected">Python</button></a>
             <a href="resume.html"><button class="headerButton">Resume</button></a>
         </div>
-        <div style="background-color: #E0CBA8;"></div>
-        <div style="background-color: #E0CBA8;"><h1>PYTHON</h1></div>
-        <div style="background-color: #E0CBA8;"></div>
+        <div style="background-color: grey;"></div>
+        <div style="background-color: grey;"><h1>PYTHON</h1></div>
+        <div style="background-color: grey;"></div>
+
+        <div></div>
+        <div>
+            <div class="codeContainer">
+                <pre>
+                    <code>
+#####CALCULATE LANDSCAPE BILL#####
+
+# 2. input, getting user inputs
+houseNum = input("Enter House Number: ")
+print("")
+propDepth = input("Enter property depth (feet): ")
+print("")
+propWidth = input("Enter property width (feet): ")
+print("")
+grassType = input("Enter type of grass (fescue, bentgrass, campus): ")
+print("")
+treeAmount = input("Enter the number of trees: ")
+print("")
+
+# 3. process
+# define propSqft
+propSqft = int(propDepth) * int(propWidth)
+
+# calculate cost
+totCost = 1000 # base cost
+
+if (propSqft>5000):
+    totCost += 500 # sqft fee
+
+if ((grassType.lower() == "fescue") or (grassType.lower() == "f")):
+    grassCost = 0.05 # price per sqft of fescue
+
+elif ((grassType.lower() == "bentgrass") or (grassType.lower() == "b")):
+    grassCost = 0.02 # price per sqft of bentgrass
+
+elif ((grassType.lower() == "campus") or (grassType.lower() == "c")):
+    grassCost = 0.01 # price per sqft of campus
+
+else: # if invalid grass input
+    grassCost = -1 # prevents error message upon incorrect grass input 
+    print("Please input a valid grass type and try again.")
+
+if grassCost > 0: # prevents error message incorrect grass input 
+    totCost = totCost + (grassCost * propSqft) # adding cost of grass
+    
+totCost = totCost + (int(treeAmount) * 100) # adding cost of trees if any
+
+# 4. output
+if grassCost > 0: # only works when valid grass type was selected
+    # print(f"Total cost for house {houseNum} is: ${round((float(totCost)), 2)}") # setting it to a float then limiting to two decimal places - note, could not get this to make it have 2 decimal places if it did not already have 2 decimal places.
+    print("Total cost for house %s is $%.2f" % (houseNum, totCost))
+                    </code>
+                </pre>
+            </div>
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+#####CALCULATE MOBILE DATA BILL#####
+
+def dataCalc(dataUse, dataPrice):
+    return dataUse * dataPrice
+
+dataUse = input("Enter data usage (Mb): ")
+
+if(int(dataUse) <= 200):
+    dataCost = 20.00
+
+elif(int(dataUse) <= 500):
+    dataCost = (dataCalc((int(dataUse)-200), 0.105))+20
+
+elif(int(dataUse) <= 1024):
+    dataCost = (dataCalc((int(dataUse)-500), 0.110))+51.50
+
+else:
+    dataCost = 118.00
+
+print("Total charge is $%.2f" % dataCost)
+                    </code>
+                </pre>
+            </div>
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+#####CALCULATE AUTOMOBILE INSURANCE#####
+# function for determining %
+def custSexPercentDeterminant(custAge, perMod1, perMod2, perMod3):
+    if(15<=int(custAge)<\25):
+        percentMod = perMod1
+    elif(25<=int(custAge)<\40):
+        percentMod = perMod2
+    elif(40<=int(custAge)<\70):
+        percentMod = perMod3
+    else:
+        percentMod = -1 # if i didnt include this it broke, as it would attempt to use the finalPriceCalculator even when not directly called, i think, which breaks when there is no percent mod.
+    return percentMod
+
+# function for determining the end price
+def finalPriceCalculator(percentMod, carPrice):
+    finalPrice = (int(carPrice) * float(percentMod))/12
+    return finalPrice
+
+# getting user inputs for sex, age, and cost of vehicle
+custSex = input("Are you 'Male' or 'Female': ")
+custAge = input("Enter your age: ")
+carPrice = input("Enter the purchase price of your vehicle: ")
+
+# determining which percent modifiers to be used depending on sex:
+if((custSex.lower() == "female") or (custSex.lower() == "f")):
+    percentMod = custSexPercentDeterminant(custAge, 0.20, 0.15, 0.10)
+
+elif ((custSex.lower() == "male") or (custSex.lower() == "m")):
+    percentMod = custSexPercentDeterminant(custAge, 0.25, 0.17, 0.10)
+
+else: # if incorrect/invalid sex is inputted
+    print("Please try again and input a valid sex")
+    quit() #cant used return like you can in js so i had to google this bit 
+
+if(percentMod > 0): #printing the final price if the user has a valid percentmod which they get by being in the valid age range
+    finalPrice = finalPriceCalculator(percentMod, carPrice)
+    print("Your monthly insurance will be $%.2f" % finalPrice)
+
+else: # if the customer does not have a valid percent modifier it means they are either too young or too old, in either case a message will be displayed:
+    if (int(custAge)>=70):
+        print("Sorry, we dont serve those over the age of 70.")
+    elif (int(custAge)<\15):
+        print("Sorry, we dont serve those under the age of 15.")
+                    </code>
+                </pre>
+            </div>
+            <br /><br /><br /><br /><br />
+        </div>
+        <div></div>
     </div>
 
+    
     
 </body>
 </html>
