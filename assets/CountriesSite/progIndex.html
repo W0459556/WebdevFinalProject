@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PROG1700 Breanna Young - Final Project</title>
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" href="progStyles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="gridContainer">
+
+
+    <div class="gridItem"></div>
+
+    <div class="gridItem" style="background-color: rgb(241, 241, 241)">
+      <br />
+      <br />
+      <h1>Country Information</h1>
+      <br />
+    </div>
+
+    <div class="gridItem"></div>
+
+
+
+    <div class="gridItem"></div>
+
+    <div class="gridItem" style="background-color: rgb(241, 241, 241)">
+      <form> 
+        <select id="countryNameList" name ="countryName">
+        </select>
+      </form>
+
+      <div class="flagHolder">
+        <img id="selectedFlag"src="flags/default.png">
+      </div>
+    </div>
+
+    <div class="gridItem"></div>
+
+
+    <div class="gridItem"></div>
+    <div class="gridItem" style="background-color: rgb(241, 241, 241);">
+      <h1 id="selectedCountry"><br /></h1>
+      <h2>Population:</h2>
+      <h2 id="selectedPopulation"><br /></h2>
+
+
+      <br />
+
+
+      <h2>Area in:</h2>
+      <select name="areaMeasurement" id="areaMeasurement">
+        <!-- <option disabled selected value> -- select an option -- </option> -->
+        <option value="miles">Sq. Miles</option>
+        <option value="kilometres">Sq. Kilometres</option>
+      </select>
+      <h2 id="selectedArea"><br /></h2> 
+
+
+      <br />
+
+
+      <h2>Population Density:</h2>
+      <div class="radioHolder">
+        <input class="radioDial" type="radio" id="milesPopDense" name="popDense" value="miles" checked>
+        <label class="radioDial" for="milesPopDense">Per Square Mile</label><br>
+        <input class="radioDial" type="radio" id="kilometresPopDense" name="popDense" value="kilometres">
+        <label class="radioDial" for="kilometresPopDense">Per Square Kilometre</label><br>
+      </div>
+      <h2 id="selectedDensity"><br /></h2>
+
+      <br />
+
+
+      <h2>Percentage of World Population</h2>
+      <h2 id="selectedPercentage"><br /></h2>
+
+
+      <br />
+
+      <a id="selectedLink" href="https://en.wikipedia.org/"><input type="button" value="Wikipedia"></a>
+
+    </div>
+
+    <div class="gridItem"></div>
+
+
+    <div class="gridItem"></div>
+
+    <div class="gridItem" style="background-color: rgb(241, 241, 241)">
+      <br />
+      <br />
+      <h1><br /></h1>
+      <br />
+      <br />
+    </div>
+
+    <div class="gridItem"></div>
+
+  </div>
+</body>
+
+</html>

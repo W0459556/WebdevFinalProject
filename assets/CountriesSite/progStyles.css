@@ -1,0 +1,72 @@
+body {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: auto 50% auto;
+}
+
+.gridItem {
+    background-color: white;
+}
+
+@media only screen and (max-width: 1500px){
+    .gridContainer{
+        grid-template-columns: auto 70% auto;
+    }
+}
+
+@media only screen and (max-width: 800px){
+    .gridContainer{
+        grid-template-columns: 0% 100% 0%;
+    }
+}
+
+.flagHolder {
+    width: 90%;
+    margin: 5%;
+    height: auto;
+    border-radius: 40px;
+    background-color: gray;
+}
+
+.radioHolder {
+    width: 40%;
+    margin: 0% 30%;
+    text-align: left;
+}
+
+img {
+    width: 90%;
+    padding: 5%;
+    border-radius: 65px;
+}
+
+input[type=radio]{
+    accent-color: grey;
+}
+
+input[type=button], select{
+    border-radius: 50px;
+    background-color: rgb(182, 182, 182);
+    color: white;
+    border: none;
+    padding: 20px;
+    text-decoration: none;
+    font-size: 16px;
+    width: 60%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+input[type=button]:hover, select:hover {
+    background-color: grey;
+    cursor: pointer;
+}
+
+.radioDial {
+    cursor: pointer;
+}
