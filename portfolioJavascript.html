@@ -18,9 +18,753 @@
             <a href="portfolioPython.html"><button class="headerButton">Python</button></a>
             <a href="resume.html"><button class="headerButton">Resume</button></a>
         </div>
-        <div style="background-color: #E0CBA8;"></div>
-        <div style="background-color: #E0CBA8;"><h1>JAVASCRIPT</h1></div>
-        <div style="background-color: #E0CBA8;"></div>
+        <div style="background-color: grey;"></div>
+        <div style="background-color: grey;"><h1>JAVASCRIPT</h1></div>
+        <div style="background-color: grey;"></div>
+
+        <div></div>
+        <div>
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////BATTLESHIPS/////
+// function to validate input number
+function intValidation(num){
+    return (!isNaN(parseInt(num)) && isFinite(num));
+}
+
+
+
+
+
+
+// validate bomb coordinates
+function xyBombValidation(bombCoordinates, boardWidth, boardHeight){
+    let bombXY = [];
+    bombXY.push((bombCoordinates.slice(0,1)).toUpperCase()); // slices off the first character which should be a letter, specifically in upper case
+    bombXY.push(bombCoordinates.slice(1)); // slices off the remainder which should be a number
+    
+    // validation for bombX:
+    if(((bombXY[0]).charCodeAt(0)>64)&&((bombXY[0]).charCodeAt(0)<\65+boardWidth)){ // if the letter is larger than A and smaller than the final one
+        var xValidation = ((bombXY[0]).charCodeAt(0)-64); // returns corresponding value on map array + 1, because if a = 0 then it's a false bool. blarg >:(
+    }
+    else{
+        console.log("\nPlease input a valid letter!\n")
+        var xValidation = false; // is false, womp womp
+    }
+
+    // validation for bombY
+    if(intValidation(bombXY[1])==true){ // if it's an int
+        if((parseInt(bombXY[1])>0)&&(parseInt(bombXY[1])<\boardHeight+1)){ // if it's bigger than one and smaller than board height +1 (which is how it;s displayed), also cant have a zero here because booleans
+            var yValidaion = parseInt(bombXY[1]);
+        }
+        else{
+            console.log("\nPlease input a valid number!\n")
+            var yValidaion = false; // not in range = false
+        }
+    }
+    else{
+        console.log("\nPlease input a valid number!\n")
+        var yValidaion = false; // not an int = false
+    }
+
+    if((xValidation != false) && (yValidaion != false)){
+        return [yValidaion-1, xValidation-1]; // no zeroes allowed beause booleans, subtracting 1 here so it's true to the map array.
+    }
+    else{
+        return false; // if it fails either, false
+    }
+}
+
+
+
+
+
+
+// this prints the board
+function printString(boardWidth, boardHeight, userBoardArray){
+    let printString = "";
+    for(var i=0; i<=boardWidth; i++){
+        for(var j=0; j<=boardHeight; j++){
+            printString += userBoardArray[i][j];
+        }
+        printString += "\n";
+    }
+    return printString;
+}
+
+
+
+
+
+
+
+// hit or miss
+function hitOrMiss(boardArray, bombValidation){
+    if(boardArray[bombValidation[0]][bombValidation[1]] != -1){ // if it isn't -1 which marks a hit spot
+        if(boardArray[bombValidation[0]][bombValidation[1]] != 0){ // if it doesnt equal 0 which represents water
+            console.log("\nHIT!!!!\n");
+            return "b"; // hit a boat
+        }
+        else{
+            console.log("\nMiss\n");
+            return "w" // hit water
+        }
+    }
+    else {
+        console.log("\nYou already bombed these coordinates!\n");
+        return false
+    }
+}
+
+
+
+
+
+// boat check
+function boatCheck(boardWidth, boardHeight, boardArray, boatNum){
+    for(var i = 0; i < boardWidth; i++){
+        for (var j = 0; j < boardHeight; j++){
+            if(boardArray[i][j] == boatNum){
+                return boatNum; // returns the number of the boat if any of its parts are still there
+            }
+        }
+    }
+    console.log(`You sank boat #${boatNum}!\n`); // announces that you sank the boat
+    return 0; // returns 0 if there are no boats of that number left
+}
+
+
+
+
+
+
+function main(){
+    // define input file, charset
+    let inputFile = "Assignment4-InputFiles/map.txt"; // local path to input files
+    const charSet = "utf-8"; //char set
+
+
+    let inputTxt = fs.readFileSync(inputFile,charSet); 
+    let linesArray = inputTxt.split("\r\n"); // split into 1d array
+    let boardArray = []; // blank array to push to
+
+
+    for(var i = 0; i < linesArray.length; i++){ // goes over each line in the array from csv
+        let lines = linesArray[i].split(","); // separates the info by commas
+        boardArray.push(lines); // pushes lines to 2d array 
+    }
+    
+
+    let boardWidth = boardArray[0].length; //define height
+    let boardHeight = boardArray.length; // define width
+
+
+    let userBoardArray = [];
+    let pusherArray = [];
+    pusherArray.push(String("").padEnd(String(boardHeight).length+1, ' ')); // pushes first line to be number of spaces equal to the length of the longest number in the height column plus one
+    userBoardArray.push(pusherArray);
+
+
+    // loop to push number labels to left of board 
+    for(var i = 0; i < boardHeight; i++){
+        let pusherArray = []; // to make a new array for each
+        var x = String(i+1).padEnd(String(boardHeight).length+1, ' '); // prints i+1 with an amount of spaces that makes the totoal length of the pushed string equal to the length of the largest number in the height column + 1
+        pusherArray.push(x);
+        userBoardArray.push(pusherArray);
+    }
+    
+
+    // push letter labels to line 0 of user board
+    for(i=0; i < boardWidth; i++){
+        userBoardArray[0].push(`${String.fromCharCode(65+i)} `);
+        for(var j=0; j<\boardWidth; j++){
+        userBoardArray[i+1].push(`  `);
+        }
+    }
+
+
+    let lifeCount = 30; // your bombs
+    let hitsCount = 0; // the amount of hits you have
+    let boatsFloating = [1,2,3,4,5]; // the boats on the board
+    let userWin = false;
+    console.log(`///////////////BATTLESHIPS///////////////\nYou have ${lifeCount} missiles to sink all 5 ships!\n`);
+
+
+    for(var bombs = 0; bombs < lifeCount; bombs++){ // lets user play with specified 30 lives
+        console.log(printString(boardWidth, boardHeight, userBoardArray)); // print board
+
+
+        let bombValidation = false;
+        let hitMiss = false;
+        while((bombValidation == false && hitMiss == false)){ // while both are false
+            let bombCoordinates = readlineSync.question(`Choose your target (ex. A1): `);
+            bombValidation = xyBombValidation(bombCoordinates, boardWidth, boardHeight); // sees if user inputs are on board
+
+
+            // theyre on the board! now see if theyrve been bombed:
+            if(bombValidation!= false){ // once the bomb position has been validated as real
+                hitMiss = hitOrMiss(boardArray, bombValidation); // was it a hit or a miss? or was it already hit?
+
+
+                if(hitMiss != false){ 
+                    boardArray[bombValidation[0]][bombValidation[1]] = -1; // marks it as hit
+
+
+                    if(hitMiss == "b"){ // boat!
+                        userBoardArray[bombValidation[0]+1][bombValidation[1]+1] = "X ";
+                        hitsCount ++; // an X marks a hit to a boat, counter goes up
+                    }
+
+
+                    else if(hitMiss == "w"){ // water :)
+                        userBoardArray[bombValidation[0]+1][bombValidation[1]+1] = "O "; // an O marks a hit to the water
+                    }
+                }
+
+
+                else{ // bombed spot
+                    bombValidation = false; // sets it back to false because the position was already bombed
+                }
+            }
+        }
+
+
+        // check for boats:
+        let boatCount = 0 // counts how many boats are left
+        for(var i = 0; i < boatsFloating.length; i++){
+            (boatsFloating[i]) = (boatCheck(boardWidth, boardHeight, boardArray, boatsFloating[i])) // pushes the result of the boatCheck of the specified boat, which won't change the array if there boat hasnt been sank.
+            boatCount += boatsFloating[i];
+        }
+
+
+        // if no boats are left the sum of the array will be zero
+        if(boatCount == 0){
+            userWin = true;
+        }
+
+
+        // if the user win condition is true
+        if(userWin == true){
+            console.log(`YOU SANK MY ENTIRE FLEET!\nYou had ${hitsCount} of ${bombs+1} hits, which sank all the ships!\nYou won, congradulations!`);
+            var bombs = 9999; // exits loop without activating loss condition
+            console.log(`
+          _    _
+       __|_|__|_|__
+     _|____________|__
+    |o o o o o o o o /
+~'\`~'\`~'\`~'\`~'\`~'\`~'\`~'\`~'\`~'\`~'\`~
+            `); // picture of a boat for the winner
+        }
+
+
+        // carry on if not
+        else if (bombs != 29){ // doesnt show the last round because the loss message does that for it
+            console.log(`You have ${lifeCount-bombs-1} missiles left\n`); // missile count
+        }
+    }
+
+
+    if(userWin == false){ // which means the win conditions were not met:
+        console.log(`GAME OVER!\nYou had ${hitsCount} of ${bombs} hits, which didnt sink all the ships!\nBetter luck next time!`)
+    }
+}
+  
+if (require.main ===module){
+    main();
+}
+                    </code>
+                </pre>
+            </div>
+
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////MADLIBS/////
+// function to validate input number
+function intValidation(num){
+    return (!isNaN(parseInt(num)) && isFinite(num));
+}
+
+
+
+
+
+// function to validate user input
+function inputValidation(input, arrayLength){
+    if(input.length==1){ // if the input is one character long it may be correct, any longer or shorter and it isnt
+        let isInt = intValidation(input);
+        if(isInt == true){ // if it's an int
+            if((input>0) && (input<\arrayLength)){ // and it's larger than 0 and smaller than or equal to the array length 
+                return input; // return it as a numeric input
+            }
+            else{
+                return false;
+            }
+        }
+        else{ // if it isnt an int:
+            if((((input.toLowerCase()).charCodeAt(0))>=97)&&(((input.toLowerCase()).charCodeAt(0))<(97+arrayLength-1))){ // if the ascii is between a (97) and smaller than 97+length (final letter given)
+                return ((input.toLowerCase()).charCodeAt(0))-96; // it returns a number, a=1 b=2 etc. which will be used to access each option array at the correct index
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    else{
+        return false;
+    }
+}
+
+
+
+
+
+function main(){
+    // define story input, choices input file; charset
+    let madlibsTxt = "Assignment4-InputFiles/the_story_file.txt"; // the story txt
+    let optionsCsv = "Assignment4-InputFiles/the_choices_file.csv"; // the options csv
+    const charSet = "utf-8";
+
+    // input: read the files.
+    let rawMadlibsTxt = fs.readFileSync(madlibsTxt,charSet); // read story txt
+    let rawOptionsCsv = fs.readFileSync(optionsCsv,charSet); // read options csv
+
+    // process:
+    // split the raw data into appropriate arrays:
+
+    // madlibs story
+    let madlibsArray = rawMadlibsTxt.split("_"); // splits the story text by _ character
+    let unfinishedOptionsArray = rawOptionsCsv.split("\r\n"); // splits the array by line breaks
+    
+    //madlibs options
+    let optionsArray = []; // create blank array to push to
+    for(var i = 0; i < unfinishedOptionsArray.length; i++){ // goes over each line in the array from csv
+        let optionsRow = unfinishedOptionsArray[i].split(","); // separates the info by commas
+        // take the length of that array and use it to generate an array of ints representing ascii of appropriate length
+        let asciiRow = []; // creates blank array to be pushed once filled
+        for(var j = 0; j < optionsRow.length-1; j++){
+            asciiRow.push(String.fromCharCode(97+j)); // 97 is lower case a, this increases by one every loop.
+        }
+        optionsArray.push(asciiRow); // pushes ascii to 2d array 
+        optionsArray.push(optionsRow); // pushes options to 2d array 
+    }
+    // console.log(madlibsArray);
+    // console.log(optionsArray);
+
+    // print, select, and store user choices:
+    var choiceIntArray = [];
+    console.log("The Itsy Bitsy Aardvark");
+    // display the user options:
+    for(let i = 1; i < (optionsArray.length); i = i + 2){ // skips every other row because that's the ascii letter row
+        console.log(`\nPLEASE CHOOSE ${(optionsArray[i][0].toUpperCase())}`); // prints the title of each- in upper case, a personal preference that i think makes them stand out more
+        for(let j = 0; j < optionsArray[i].length-1; j= j + 1){ // prints "[number]) [option] once for every option in the given array"
+            console.log(`${optionsArray[i-1][j]}) ${optionsArray[i][j+1]}`); 
+        } // note: i altered the final line (adverb choice) of the csv to display this functionality
+        
+        // validating the user's letter or numeric choice
+        var choiceValidation = false;
+        while(choiceValidation == false){
+        let userChoice = readlineSync.question(`Enter choice (${optionsArray[i-1][0]}-${optionsArray[i-1][(optionsArray[i-1].length)-1]}): `); // prints first letter in array to last letter in array, so they can be of variable length :)
+        var choiceValidation = inputValidation(userChoice, optionsArray[i].length);
+        if(choiceValidation != false){
+            choiceIntArray.push(choiceValidation); // if it isnt false it will push the chosen option after it has been altered to be suitable
+        }
+    }
+        // for testing: console.log("\n");
+    }
+    // console.log(choiceIntArray);
+    // print the final madlib:
+    let madlibsString = "";
+    for(i=0; i<\madlibsArray.length; i++){
+        var isInt = intValidation(madlibsArray[i]);
+        if(isInt == true){ // print the user input if it is validated as a number
+            madlibsString += ((optionsArray [(parseInt(madlibsArray[i])*2-1)] [choiceIntArray[(parseInt(madlibsArray[i]))-1]]).toUpperCase()); // the *2-1 is because every other array is just the letters
+        }
+        else{ // else print the story
+            madlibsString += (madlibsArray[i]);
+        }
+    }
+    // output:
+    console.log(`\nYour Completed Story:\n\n${madlibsString}\n`); // aaand print it lol
+}
+  
+if (require.main ===module){
+    main();
+}
+                    </code>
+                </pre>
+            </div>
+
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////THE A-TEAM/////
+// create function that capitalise the string, create function that lowercase-ifies the string
+function capsString(sentence){
+    if(sentence.length<=20){
+        var sentence=sentence.toUpperCase();
+    }
+    else{
+        var sentence=sentence.toLowerCase();
+    }
+    return sentence;
+}
+
+
+
+
+
+
+// random integer generator
+function randInt(max) {
+    var x = (Math.floor(Math.random() * max)); // returns random int between 0 and specified number excl. specified number
+    return x;
+}
+
+
+
+
+
+
+function main(){
+
+    // define input, output file; charset
+    let inputFile = "Assignment4-InputFiles/ateam_Original.txt";
+    let outputFile = "ateam_Altered.txt"; 
+    const charSet = "utf-8";
+
+    // input
+    // takes the data from the appropriate file
+    let rawData = fs.readFileSync(inputFile,charSet); // read the input file
+
+    // process:
+    // split it into lines by separating at the \r\n
+    let linesArray = rawData.split("\r\n"); // splits into lines
+    
+
+    // randomly select number between 0 and array.length
+    let removedLine = randInt(linesArray.length);
+
+    // create dashed line seen in example output but im too lazy to hit the hyphen key that many times
+    let dashedLine = "";
+    var i = 0;
+    while(i<=40){
+        dashedLine += "-";
+        i++;
+    }
+    // console.log(dashedLine);
+
+    let oldLines = "";
+    let changedLines = "";
+
+    // change capitalisation
+    // push changed line to new array
+    // ignore line specified by randint
+    for(var i=0; i<\linesArray.length; i++){
+        if(i != removedLine){
+            changedLines += (`${i+1}: ${capsString(linesArray[i])}\n`) // pushes the altered version of the string to new index
+        }
+        else{
+            changedLines += ("\n");
+        }
+        oldLines+=(`${linesArray[i]}\n`);
+    }
+    let outputText = (`${dashedLine}\nOriginal Text\n${dashedLine}\n${oldLines}\n${dashedLine}\nAltered Text\n${dashedLine}\n${changedLines}`);
+
+    // output
+    console.log(outputText); // prints the changed lines
+    fs.writeFileSync(outputFile, outputText); // writes changed lines to file
+
+}
+    
+if (require.main ===module){
+    main();
+}  
+                    </code>
+                </pre>
+            </div>
+
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////MESSAGE REDACTER/////
+// activate readlineSync
+var readlineSync = require('readline-sync');
+
+
+
+
+
+
+// to validate the array of letters the user wishes to remove from the phrase
+function arrayValidation(removeArray){
+    for(var i = 0; i < removeArray.length; i++){
+        if(removeArray[i].length>1){
+            var arrayValid = false; // if theyre longer than 1 it returns false
+            break; // to end loop as soon as it == false so it cant be overwritten if the next one is true
+        }
+        else{
+            var arrayValid = true;
+        }
+    }
+    if (arrayValid == false){ // prints to tell user that their input was invalid
+        console.log("\nComma separated list not valid.");
+    }
+    return arrayValid;
+}
+
+
+
+
+
+
+// create final string
+function stringCompound(phraseArray){
+    var redactedString = "";
+    for(var i=0; i<\phraseArray.length; i++){ // adds together every letter in array to create a string
+        redactedString = redactedString + phraseArray[i];
+    }
+    return redactedString;
+}
+
+
+
+
+
+
+// DO NOT EDIT: The main function to house our program code 
+function main()
+{
+    let gameOver = false;
+    while(gameOver == false){
+        let userPhrase = readlineSync.question("Type a phrase (or quit to exit program): " )
+        if (userPhrase.toLowerCase()=="quit"){
+            gameOver = true; // whole program will be in while loop dependant on gameOver == false;
+            break;
+        }
+
+        let arrayValid = false;
+        while(arrayValid == false){ // if the array is not valid (ex. every item in array must be 1 character long, if you inpit "a,b,c" that's valid but not "ab,c")
+            let removeStr = readlineSync.question("\nType a comma-separated list of letters to redact: ");
+            var removeArray = removeStr.split(",");
+            arrayValid = arrayValidation(removeArray);
+        }
+
+        // for testing: console.log(removeArray);
+
+        let removedChar = 0;
+
+        let phraseArray = userPhrase.split(""); // splits every character into its own list entry
+
+        // for testing: console.log(phraseArray);
+        for(var i = 0; i < phraseArray.length; i++){ // for the length of the phrase
+            for(var j = 0; j < removeArray.length; j++) // for the length of characters to be removed
+            if(phraseArray[i].toLowerCase() == removeArray[j]){ // if theyre equal,
+                removedChar = removedChar + 1; // up the count by 1
+                phraseArray[i] = "_"; // and replace the character with an underscore
+            }
+        }
+        // for testing: console.log(phraseArray);
+
+        let redactedString = stringCompound(phraseArray);
+
+        console.log(`Number of letters redacted: ${removedChar}`);
+        console.log(`Redacted phrase: ${redactedString}`);
+    }
+}
+
+// DO NOT EDIT: Trigger our main function to launch the program
+if (require.main === module)
+{
+    main();
+}
+                    </code>
+                </pre>
+            </div>
+
+
+            <div class="codeContainer">
+                <pre>
+                    <code>
+/////GIRL GUIDES COOKIE SALE CALCULATOR/////
+// activate readlineSync
+var readlineSync = require('readline-sync');
+
+
+
+
+
+
+// function to validate the numeric inputs
+function validateNumericInput(x)
+{
+    if(Number.isInteger(x) == true){ // if it's an integer
+        return true; // return true
+    }
+    else{ // if it isnt
+        console.log("Looks like you didn't enter an integer, please try again."); // tell the user
+        return false; // if the input isnt an int it returns false. // and return false
+    }
+}
+
+
+
+
+
+
+// function to capitalise the first letter of each guide's name
+function guideNameCapitalisation(guideName){
+    var guideNameArray = guideName.split(""); // split it into array of letters
+    guideNameArray[0] = guideNameArray[0].toUpperCase(); // makes first letter uppercase
+
+    for(var i = 1; i < guideNameArray.length; i ++){
+        guideNameArray[i] = guideNameArray[i].toLowerCase();
+    } // makes the rest of it lower case
+
+    var capsGuideName = ""; // creates blank string to make new capitalised guide name.
+    for(var i = 0; i < guideNameArray.length; i ++){
+        var capsGuideName = capsGuideName + guideNameArray[i];
+    }
+    return capsGuideName;
+}
+
+
+
+
+
+
+// determine the prize
+function determinePrize(guideStats, avgSold, i){
+    if(guideStats[1][i] == 0){
+        var prize = 0; // no prize for 0 sold
+    }
+    else if(guideStats[1][i] < avgSold){
+        var prize = 1; // cookies for those who sold less than average but more than 0
+    }
+    else{
+        var prize = 2; // badge for those who sold equal to or above the average
+    }
+    return prize;
+}
+
+
+
+
+
+
+// main function
+function main()
+{
+    var numberValid = false;
+    while(numberValid == false){
+        var guideAmount = parseInt(readlineSync.question("Enter the number of guides selling cookies: "));
+        numberValid = validateNumericInput(guideAmount);
+    } // validate the number of guides inputted by user.
+
+
+    var guideStats = [
+        [], // [0] - guide names
+        [], // [1] - amount sold
+        [], // [2] - spaces to go after their name
+        []  // [3] - their prize
+    ];
+
+    for (var i = 0; i < guideAmount; i ++){
+        var guideName = readlineSync.question(`\nEnter the name of guide #${i+1}: `);
+        var guideName = guideNameCapitalisation(guideName);
+    
+        var numberValid = false;
+        while(numberValid == false){
+            var guideSold = parseInt(readlineSync.question(`Enter the number of boxes sold by ${guideName}: `));
+            numberValid = validateNumericInput(guideSold);
+        } // validate the number of cookies sold inputted by user.
+    
+        guideStats[0].push(guideName); // pushes guide name to first row of 2d array
+        guideStats[1].push(guideSold); // pushes their amount to second row of 2d array
+        // for bugtesting: console.log(guideStats);
+    }
+
+    var totSold = 0
+    for(var i = 0; i < guideStats[1].length; i++){
+        var totSold = totSold + guideStats[1][i];
+    }
+    // for testing: console.log(totSold);
+    // divide this by guideAmount for average
+
+    var avgSold = totSold/guideAmount;
+    // for testing: console.log(avgSold.toFixed(1))
+
+    console.log(`\n\nThe average number of boxes sold by each guide was ${avgSold.toFixed(1)}`);
+
+    // possible prizes:
+    var prizesArray = ["", "Left over cookies", "Super Seller Badge", "Trip to Girl Guide Jamboree in Aruba!"]
+
+    for(var i = 0; i < guideStats[0].length; i++){
+        var guideSpace = "";
+        for(var j = 0; j < (18-(guideStats[0][i].length)); j++){
+            var guideSpace = guideSpace + " ";
+        }
+        var guideSpace = guideSpace + "- ";
+        guideStats[2].push(guideSpace); // this makes the guide name, the spaces, and the "- " that comes before their prize be exactly 20 char long.
+    }
+
+    /* for testing:
+    for(var i = 0; i < guideStats[0].length; i++){
+    console.log(guideStats[0][i] + guideStats[2][i])
+    }
+    */
+
+    /*
+    no cookies sold: no prize
+    below troop average: leftover cookies
+    above or equal to troop average: super seller badge
+    most in troop: jamboree trip to aruba
+
+    all best sellers will get the trip, if they all sell 8 they will all get the trip, for example
+    */
+
+    mostSold = 0;
+    for(var i = 0; i < guideAmount; i++){
+        var prize = determinePrize(guideStats, avgSold, i);
+        guideStats[3].push(prize); // pushes prize to array
+        if(guideStats[1][i]>mostSold){
+            var mostSold = guideStats[1][i];
+        }
+    }
+
+    for(var i = 0; i < guideAmount; i++){
+        if((guideStats[1][i] == mostSold) && (mostSold > 0)){
+        guideStats[3][i] = 3;
+        }
+    } // this overwrites their previous prize if they sold the most or if multiple people sold the most
+
+
+
+    console.log("Guide               Prizes Won:")
+    console.log("------------------------------------------------------------")
+    for(var i = 0; i < guideAmount; i++){
+        console.log(`${guideStats[0][i]}${guideStats[2][i]}${prizesArray[guideStats[3][i]]}`);
+    }// prints their name, their amount of spaces, and the prize they got :)
+
+}
+
+// DO NOT EDIT: Trigger our main function to launch the program
+if (require.main === module)
+{
+    main();
+} 
+                    </code>
+                </pre>
+            </div>
+            <br /><br /><br /><br /><br />
+        </div>
+        <div></div>
+
+
     </div>
 
     
