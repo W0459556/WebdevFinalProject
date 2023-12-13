@@ -137,3 +137,35 @@ code{
     font-size: 20px;
     overflow-wrap: break-word;
 }
+
+
+
+.ableGamers {
+    text-decoration: none;
+    color: rgb(138, 87, 24);
+}
+
+.ableGamers:hover{
+    cursor: pointer;
+    color: rgb(184, 108, 16);
+}
+
+.linuxLink {
+    text-decoration: none;
+    color: rgb(67, 67, 67);
+}
+
+.linuxLink:hover{
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.openSourceLink {
+    text-decoration: none;
+    color: rgb(0, 111, 7);
+}
+
+.openSourceLink:hover{
+    cursor: pointer;
+    color: rgb(0, 171, 11);
+}
