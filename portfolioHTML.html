@@ -7,6 +7,60 @@
     <script src="assets/script.js"></script>
     <link rel="icon" type="image/x-icon" href="assets/favicon.png">
 </head>
+<style>
+    input[type=text], input[type=password], input[type=email], input[type=datetime-local], select {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    box-sizing: border-box;
+    background-color: grey;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=datetime-local]:focus, select:focus {
+    background-color: black;
+    color: white;
+}
+
+input[type=datetime-local]{
+    text-align: center;
+}
+
+p, label, ul {
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Courier New', Courier, monospace;
+    color: black;
+}
+
+ul {
+    margin: 0px 0px 0px 20px;
+}
+
+input[type=submit], input[type=reset]{
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin: 10px;
+    cursor: pointer;
+    background-color: grey;
+    border: 1px solid #ccc;
+}
+
+input[type=submit]:hover, input[type=reset]:hover{
+    background-color: hsl(300, 100%, 30%);
+    color: white;
+}
+
+input[type=checkbox], input[type=radio]{
+    accent-color: hsl(300, 100%, 30%);
+}
+
+</style>
 <body>
     <div class="gridContainerHeader">
         <div class="header">
@@ -42,6 +96,62 @@
             <br />
             <br />
             <br />
+            <h2>Form Example</h2>
+            <form>
+                <input type="email" id = "email" name = "email" placeholder="Email" required><br />
+
+                <input type="text" id="fname" name="fname" placeholder="First Name"><br>
+
+                <input type="text" id="lname" name="lname" placeholder="Last Name"><br />
+
+                <input type ="password" id="password" name="password" placeholder="Password"pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required><br />
+                <p><b>Password must contain:</b></p>
+                    <p>a lowercase letter</p>
+                    <p>an uppercase letter</p>
+                    <p>a number</p>
+                    <p>eight or more characters</p>
+                <br /><br />
+
+                <p><b>Radio Options: select multiple</b></p>
+                <input type="radio" id="days" name="friday" value="friday">
+                <label for="friday">Option 1</label><br>
+                
+                <input type="radio" id="days" name="saturday" value="saturday">
+                <label for="saturday">Option 2</label><br>
+                
+                <input type="radio" id="days" name="sunday" value="sunday">
+                <label for="age3">Option 3</label><br><br>
+
+                <p><b>Radio Options: select One</b></p>
+                <input type="radio" id="days" name="selectOne" value="friday">
+                <label for="friday">Option 1</label><br>
+                
+                <input type="radio" id="days" name="selectOne" value="saturday">
+                <label for="saturday">Option 2</label><br>
+                
+                <input type="radio" id="days" name="selectOne" value="sunday">
+                <label for="age3">Option 3</label><br><br>
+
+                <br />
+                <label for="attendTime"><b>Date and Time Selector</b></label><br />
+                <input type="datetime-local" id="attendTime" name="attendTime"><br />
+                <br />
+                <label for="attendLocation"><b>Drop Down Selector</b></label>
+                <select name="attendLocation" id="attendLocation">
+                    <option value="Toronto">Option 1</option>
+                    <option value="LondoN">Option 2</option>
+                    <option value="Paris">Option 3</option>
+                    <option value="Tokyo">Option 4</option>
+                </select><br />
+
+                <br />
+
+                <label for="tos">Mandatory Checkbox</a></label>
+                <input type="checkbox" id="tos" name="tos" required><br />
+
+                <input type="submit" value="Submit" /><input type="reset" value="Reset" />
+
+            </form> 
         </div>
         <div></div>
 
